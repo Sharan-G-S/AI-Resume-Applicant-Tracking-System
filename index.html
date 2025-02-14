@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS Resume Analyzer - ISS057</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Add KSI text styling */
+        .ksi-text {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 5em;
+            font-weight: 700;
+            color: #0288d1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .ksi-text:hover {
+            transform: scale(1.1);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .ksi-text {
+                font-size: 3em;
+                right: 20px;
+            }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa 0%, #80deea 50%, #4fc3f7 100%);
+            color: #2c3e50;
+            padding: 40px 20px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 2px, transparent 4px);
+            background-size: 30px 30px;
+            animation: moveBackground 60s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-50px, -50px);
+            }
+        }
+
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            z-index: 1;
+        }
+
+        .wave {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2380deea' fill-opacity='0.3' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+        }
+
+        h1 {
+            color: #0288d1;
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 i {
+            font-size: 42px;
+            background: linear-gradient(45deg, #03a9f4, #00bcd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #resumeForm {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 25px;
+            border-radius: 20px;
+            border: 2px solid #b3e5fc;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        input::placeholder {
+            color: #90a4ae;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #03a9f4;
+            box-shadow: 0 5px 20px rgba(3, 169, 244, 0.2);
+            transform: translateY(-2px);
+        }
+
+        input[type="file"] {
+            background: #e1f5fe;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button {
+            background: linear-gradient(45deg, #03a9f4, #00bcd4);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(3, 169, 244, 0.2);
+        }
+
+        input[type="file"]::-webkit-file-upload-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(3, 169, 244, 0.3);
+        }
+
+        button {
+            background: linear-gradient(45deg, #03a9f4, #00bcd4);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(3, 169, 244, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(3, 169, 244, 0.4);
+        }
+
+        .result {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .result h2 {
+            color: #0288d1;
+            font-size: 28px;
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 20px;
+            display: inline-block;
+        }
+
+        .result h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 30px;
+            background: linear-gradient(to bottom, #03a9f4, #00bcd4);
+            border-radius: 3px;
+        }
+
+        .feedback {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #b3e5fc;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feedback::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #03a9f4, #00bcd4);
+        }
+
+        .feedback:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(3, 169, 244, 0.2);
+        }
+
+        .feedback strong {
+            color: #0288d1;
+            font-size: 1.1em;
+        }
+
+        .feedback p {
+            margin-top: 10px;
+            color: #546e7a;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #37474f;
+            font-size: 24px;  /* Increased from 15px */
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer strong {
+            color: #0288d1;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h1 i {
+                font-size: 32px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 15px;
+            }
+
+            .feedback {
+                padding: 20px;
+            }
+        }
+
+        .decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(3, 169, 244, 0.1), rgba(0, 188, 212, 0.1));
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration-2 {
+            bottom: -100px;
+            left: -100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Added KSI text -->
+    <div class="ksi-text">KSI</div>
+    
+    <div class="container">
+        <div class="wave"></div>
+        <div class="decoration decoration-1"></div>
+        <div class="decoration decoration-2"></div>
+        <h1><i class="fa-solid fa-briefcase"></i> ATS Resume Analyzer - Team ISS057</h1>
+        <form id="resumeForm">
+            <div class="input-container">
+                <input type="text" id="job_description" placeholder="Enter Job Description..." required>
+            </div>
+            <div class="input-container">
+                <input type="file" id="resume" accept=".pdf" multiple required>
+            </div>
+            <button type="submit"><i class="fa-solid fa-upload"></i> Upload & Analyze</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+    <div class="footer">
+        <p>Developed by Team <strong>ISS057</strong> | AI-Powered Resume Analysis</p>
+    </div>
+    <script>
+        document.getElementById("resumeForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append("job_description", document.getElementById("job_description").value);
+            const files = document.getElementById("resume").files;
+            for (let i = 0; i < files.length; i++) {
+                formData.append("resumes", files[i]);
+            }
+            const response = await fetch("/upload/", { method: "POST", body: formData });
+            const data = await response.json();
+            
+            let resultHTML = "<h2>Results:</h2>";
+            if (data.length > 0) {
+                data.forEach((res, index) => {
+                    resultHTML += `<div class="feedback"><strong>${index + 1}. &nbsp;${res.resume}</strong> - Score: <strong>${res.score}%</strong><p>💡 ${res.feedback}</p></div>`;
+                });
+            } else {
+                resultHTML += "<p>No resumes analyzed. Please try again!</p>";
+            }
+            document.getElementById("result").innerHTML = resultHTML;
+        });
+    </script>
+</body>
+</html>
