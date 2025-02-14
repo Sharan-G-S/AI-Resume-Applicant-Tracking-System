@@ -61,4 +61,4 @@ npm start
 This project is licensed under the MIT License.
 
 ## 📧 Contact
-For queries or contributions, reach out at **your.email@example.com** or open an issue.
+For queries or contributions, reach out at **sharangs08@gmail.com.com** or open an issue.
