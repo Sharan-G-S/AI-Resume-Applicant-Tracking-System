@@ -69,4 +69,19 @@ For queries or contributions, reach out at **sharangs08@gmail.com.com** or open 
 <img width="1667" alt="1" src="https://github.com/user-attachments/assets/1d2c4497-5444-44e5-abf1-deb8e9d5dc7d" />
 
 
+
+
+<img width="1667" alt="2" src="https://github.com/user-attachments/assets/b2add8c8-b5c3-49d5-a207-1e72aa0c1089" />
+
+
+
+<img width="1669" alt="3" src="https://github.com/user-attachments/assets/d14452dd-897e-4866-8184-9c7b7b1873c8" />
+
+
+
+<img width="1662" alt="4" src="https://github.com/user-attachments/assets/9f146061-8864-4fd1-9f51-e9da32732961" />
+
+
+
+
     
