@@ -1,4 +1,4 @@
-# AI-Resume-Analyzer
+# AI-Resume-Applicant Tracking System(ATS)
 **#Team  ISS-057**
 ## 📌 Overview
 AI Resume Analyzer is a cutting-edge application that leverages AI and FastAPI to analyze resumes, provide feedback, and enhance job application success rates. This tool is designed for applicants, recruiters, and hiring managers to assess resumes efficiently and optimize them for ATS (Applicant Tracking Systems).
